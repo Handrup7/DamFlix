@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Nombre de la aplicación -->
+    <string name="app_name">DAMFlix</string>
+
+    <!-- Navegación y barra superior -->
+    <string name="nav_movies">Películas</string>
+    <string name="nav_add">Añadir</string>
+    <string name="nav_information">Información</string>
+
+    <!-- Pantalla de información -->
+    <string name="info_app_name">DAMFlix</string>
+    <string name="info_description">Tu catálogo de películas</string>
+    <string name="info_profile_image">Imagen de perfil</string>
+    <string name="info_technologies">Aplicación desarrollada con Kotlin y Jetpack Compose.\nRealizada por Handrup.</string>
+
+    <!-- Formulario de películas -->
+    <string name="form_title">DAMFlix - Mis películas</string>
+    <string name="form_movie_title">Título de la película</string>
+    <string name="form_director">Director/a</string>
+    <string name="form_release_year">Año de estreno</string>
+    <string name="form_movie_seen">Película ya vista</string>
+    <string name="movie_not_seen">Película no vista</string>
+    <string name="form_save_movie">Guardar película</string>
+
+    <!-- Lista de películas -->
+    <string name="movie_director_year">%1$s • %2$d</string>
+
+    <!-- Validación del formulario -->
+    <string name="form_year_error">Introduce un año entre 1700 y 2026</string>
+
+    <!-- Mensajes -->
+    <string name="movie_saved">Película guardada</string>
+    <string name="movie_list_empty">No hay películas en la lista</string>
+
+    <!-- Cabecera del menú lateral -->
+    <string name="drawer_header">DAMFlix - Room ORM</string>
+
+    <!-- Descripción accesible del botón hamburguesa -->
+    <string name="drawer_open_menu">Abrir menú</string>
+
+    <!-- Accesibilidad de los botones de favoritos -->
+    <string name="favorite_add_description">Marcar como favorita</string>
+    <string name="favorite_remove_description">Quitar de favoritas</string>
+
+    <!-- Navegación: edición de películas -->
+    <string name="nav_edit">Editar</string>
+
+    <!-- Formulario de edición de películas -->
+    <string name="form_edit_title">Editar película</string>
+    <string name="form_edit_save">Guardar cambios</string>
+    <string name="movie_not_found">No se ha encontrado la película</string>
+
+    <!-- Acciones de la lista de películas -->
+    <string name="edit_button_description">Editar película</string>
+    <string name="delete_button_description">Eliminar película</string>
+
+    <!-- Confirmación de eliminación -->
+    <string name="confirm_delete_title">¿Eliminar película?</string>
+    <string name="confirm_delete_message">«%1$s» se eliminará de la lista.</string>
+    <string name="confirm_delete_confirm">Eliminar</string>
+    <string name="confirm_delete_cancel">Cancelar</string>
+
+    <!-- Mensajes -->
+    <string name="movie_updated">Película actualizada</string>
+
+</resources>
