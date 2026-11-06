@@ -25,4 +25,10 @@ class PeliculaRepository(private val dao: PeliculaDao) {
     suspend fun eliminar(pelicula: PeliculaEntity) {
         dao.eliminar(pelicula)
     }
+
+    // Devuelve la película con el id indicado, o null si no existe.
+    // La usa la pantalla de detalle.
+    suspend fun obtenerPorId(id: Int): PeliculaEntity? {
+        return dao.obtenerPorId(id)
+    }
 }

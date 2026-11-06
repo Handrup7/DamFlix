@@ -32,13 +32,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.damflix_2.DAMFlixApplication
+import com.example.damflix_2.ViewModel.DetallePeliculaViewModel
+import com.example.damflix_2.ViewModel.DetallePeliculaViewModelFactory
 import com.example.damflix_2.ui.View.FormularioEditarPelicula
 import com.example.damflix_2.ui.View.FormularioPelicula
 import com.example.damflix_2.ui.View.ListaPeliculas
+import com.example.damflix_2.ui.View.PantallaDetalleScreen
 import com.example.damflix_2.ui.View.PantallaInformacion
 import com.example.damflix_2.ViewModel.PeliculasViewModel
 import kotlinx.coroutines.launch
@@ -277,6 +285,12 @@ fun Navegacion(viewModel: PeliculasViewModel) {
                         onEditarPelicula = { pelicula ->
                             viewModel.seleccionarParaEditar(pelicula)
                             navController.navigate(Ruta.Editar.path)
+                        },
+
+                        // Al tocar la tarjeta navegamos a la pantalla
+                        // de detalle con el id de la película.
+                        onPeliculaClick = { peliculaId ->
+                            navController.navigate(Ruta.Detalle.crearRuta(peliculaId))
                         }
                     )
                 }
@@ -317,6 +331,38 @@ fun Navegacion(viewModel: PeliculasViewModel) {
                                 launchSingleTop = true
                             }
                         }
+                    )
+                }
+
+                // Ruta de detalle con el argumento peliculaId (tipo Int).
+                // El ViewModel se crea con su fábrica, inyectando el
+                // repositorio que vive en la Application.
+                composable(
+                    route = Ruta.Detalle.path,
+                    arguments = listOf(
+                        navArgument("peliculaId") {
+                            type = NavType.IntType
+                        }
+                    )
+                ) { backStackEntry ->
+                    // Leemos el id que llegó en la ruta.
+                    val id = backStackEntry.arguments?.getInt("peliculaId") ?: 0
+
+                    // Obtenemos el repositorio desde la Application
+                    // y creamos el ViewModel con su fábrica.
+                    val context = LocalContext.current
+                    val app = context.applicationContext as DAMFlixApplication
+                    val detalleViewModel: DetallePeliculaViewModel = viewModel(
+                        factory = DetallePeliculaViewModelFactory(app.repository)
+                    )
+
+                    PantallaDetalleScreen(
+                        peliculaId = id,
+                        viewModel = detalleViewModel,
+
+                        // Al pulsar "volver" descartamos esta pantalla
+                        // y recuperamos la anterior de la pila.
+                        onVolver = { navController.popBackStack() }
                     )
                 }
 

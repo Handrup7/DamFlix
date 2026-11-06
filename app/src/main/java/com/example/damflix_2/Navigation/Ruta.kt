@@ -3,6 +3,7 @@ package com.example.damflix_2.Navigation
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.automirrored.filled.List
@@ -44,4 +45,14 @@ sealed class Ruta(
         label = R.string.nav_edit,
         icon = Icons.Filled.Edit
     )
+
+    // Ruta dinámica con parámetro de ID (en minúsculas).
+    // No aparece en el menú: se abre al tocar una tarjeta de la lista.
+    object Detalle : Ruta(
+        path = "detalle/{peliculaId}",
+        label = R.string.nav_detail,
+        icon = Icons.Filled.Details
+    ) {
+        fun crearRuta(peliculaId: Int) = "detalle/$peliculaId"
+    }
 }

@@ -4,14 +4,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.damflix_2.Data.PeliculaRepository
 import com.example.damflix_2.Data.local.PeliculaEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
+/**
+ * ViewModel del catálogo de películas.
+ *
+ * Convierte el Flow reactivo de Room en un StateFlow observable para la UI
+ * y expone las acciones del usuario (añadir, editar o eliminar películas,
+ * marcar favorita). Las operaciones de escritura se ejecutan en
+ * Dispatchers.IO para no bloquear el hilo principal.
+ */
 class PeliculasViewModel(private val repository: PeliculaRepository) : ViewModel() {
 
-    // Conversión automática del Flow de Room en StateFlow reactivo para Compose
+    // Convierte el Flow reactivo de Room en un StateFlow que Compose
+    // puede recolectar. Emite la lista vacía como valor inicial y se
+    // actualiza automáticamente cada vez que cambian los datos.
     val listaPeliculas: StateFlow<List<PeliculaEntity>> = repository.todasPeliculas
         .stateIn(
             scope = viewModelScope,
@@ -19,9 +31,12 @@ class PeliculasViewModel(private val repository: PeliculaRepository) : ViewModel
             initialValue = emptyList()
         )
 
+    /**
+     * Añade una película nueva a la base de datos.
+     */
     fun agregarPelicula(titulo: String, director: String, añoEstreno: Int, esVista: Boolean) {
         viewModelScope.launch {
-            // Creamos el objeto con los datos recibidos del formulario.
+            // Creamos la entidad con los datos recibidos del formulario.
             val nueva = PeliculaEntity(
                 id = 0,
                 titulo = titulo,
@@ -31,15 +46,26 @@ class PeliculasViewModel(private val repository: PeliculaRepository) : ViewModel
                 esFavorita = false
             )
 
-            // Insertamos la película en la base de datos.
-            repository.insertar(nueva)
+            // Insertamos la película en un hilo de I/O (evita ANR).
+            withContext(Dispatchers.IO) {
+                repository.insertar(nueva)
+            }
         }
     }
 
+    /**
+     * Cambia el estado de favorita de una película.
+     */
     fun conmutarFavorito(pelicula: PeliculaEntity) {
         viewModelScope.launch {
+            // Copiamos la película cambiando solo la bandera esFavorita
+            // (no mutamos el objeto original).
             val actualizada = pelicula.copy(esFavorita = !pelicula.esFavorita)
-            repository.actualizar(actualizada)
+
+            // Actualizamos el registro en un hilo de I/O.
+            withContext(Dispatchers.IO) {
+                repository.actualizar(actualizada)
+            }
         }
     }
 
@@ -52,15 +78,22 @@ class PeliculasViewModel(private val repository: PeliculaRepository) : ViewModel
         peliculaEnEdicion = pelicula
     }
 
-    // Elimina la película de la base de datos.
+    /**
+     * Elimina la película de la base de datos.
+     */
     fun eliminarPelicula(pelicula: PeliculaEntity) {
         viewModelScope.launch {
-            repository.eliminar(pelicula)
+            // Eliminamos el registro en un hilo de I/O.
+            withContext(Dispatchers.IO) {
+                repository.eliminar(pelicula)
+            }
         }
     }
 
-    // Actualiza los datos de una película existente.
-    // Recibe la película original y los valores nuevos del formulario de edición.
+    /**
+     * Actualiza los datos de una película existente.
+     * Recibe la película original y los valores nuevos del formulario de edición.
+     */
     fun editarPelicula(
         pelicula: PeliculaEntity,
         titulo: String,
@@ -76,7 +109,11 @@ class PeliculasViewModel(private val repository: PeliculaRepository) : ViewModel
                 añoEstreno = añoEstreno,
                 esVista = esVista
             )
-            repository.actualizar(actualizada)
+
+            // Actualizamos el registro en un hilo de I/O.
+            withContext(Dispatchers.IO) {
+                repository.actualizar(actualizada)
+            }
         }
     }
 }

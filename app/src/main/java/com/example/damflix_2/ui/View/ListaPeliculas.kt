@@ -1,5 +1,6 @@
 package com.example.damflix_2.ui.View
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,12 +41,14 @@ import com.example.damflix_2.ViewModel.PeliculasViewModel
  * Pantalla que muestra las películas guardadas.
  *
  * Observa el estado del ViewModel y permite cambiar
- * el estado de favorita, editar o eliminar cada película.
+ * el estado de favorita, editar o eliminar cada película,
+ * y abrir su pantalla de detalle al tocar la tarjeta.
  */
 @Composable
 fun ListaPeliculas(
     viewModel: PeliculasViewModel,
     onEditarPelicula: (PeliculaEntity) -> Unit,
+    onPeliculaClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Recogemos el StateFlow del ViewModel como un estado de Compose.
@@ -96,8 +99,11 @@ fun ListaPeliculas(
                 ) { pelicula ->
 
                     // Tarjeta que contiene los datos de cada película.
+                    // Al tocarla navegamos a su pantalla de detalle.
                     Card(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onPeliculaClick(pelicula.id) }
                     ) {
                         // Colocamos la información y el botón en una fila.
                         Row(

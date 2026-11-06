@@ -47,6 +47,15 @@
     <!-- Navegación: edición de películas -->
     <string name="nav_edit">Editar</string>
 
+    <!-- Ruta y pantalla de detalle -->
+    <string name="nav_detail">Detalle</string>
+    <string name="detail_back_to_catalog">Volver al catálogo</string>
+    <string name="detail_loading">Cargando datos de Room en segundo plano…</string>
+    <string name="detail_director">Director/a: %1$s</string>
+    <string name="detail_year">Año de estreno: %1$d</string>
+    <string name="detail_status_seen">Estado: Ya vista</string>
+    <string name="detail_status_not_seen">Estado: Sin ver</string>
+
     <!-- Formulario de edición de películas -->
     <string name="form_edit_title">Editar película</string>
     <string name="form_edit_save">Guardar cambios</string>
